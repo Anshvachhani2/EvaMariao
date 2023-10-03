@@ -176,7 +176,7 @@ async def languages_cb_handler(client: Client, query: CallbackQuery):
     )
     req = query.from_user.id
     offset = 0
-    btn.append([InlineKeyboardButton(text="Back to files", callback_data=f"next_{req}_{key}_{orginal_offset}")])
+    btn.append([InlineKeyboardButton(text="Back to files", icallback_data=f"next_{req}_{key}_{orginal_offset}")])
 
     await query.edit_message_reply_markup(InlineKeyboardMarkup(btn))"""
 
@@ -271,11 +271,6 @@ async def filter_languages_cb_handler(client: Client, query: CallbackQuery):
             ]
             for file in files
         ]  
-    batch_ids = files
-    message = query.message
-    temp.BATCH_FILES[f"{message.chat.id}-{message.id}"] = batch_ids
-    batch_link = f"batchfiles#{message.chat.id}#{message.id}#{query.from_user.id}"   
-    #offset = 0
     btn.insert(
         0,
         [
