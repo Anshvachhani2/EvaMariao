@@ -107,6 +107,11 @@ async def next_page(bot, query):
                 InlineKeyboardButton("NEXT ▶️", callback_data=f"next_{req}_{key}_{n_offset}")
             ],
         )
+       btn.insert(
+           [
+              InlineKeyboardButton("ʟᴀɴɢᴜᴀɢᴇs", callback_data=f"languages#{key}#0#{offset}")
+           ],
+        )
     try:
         await query.edit_message_reply_markup(
             reply_markup=InlineKeyboardMarkup(btn)
@@ -138,6 +143,197 @@ async def advantage_spoll_choker(bot, query):
             k = await query.message.edit('')
             await asyncio.sleep(10)
             await k.delete()
+
+
+@Client.on_callback_query(filters.regex(r"^languages#"))
+async def languages_cb_handler(client: Client, query: CallbackQuery):
+
+    if int(query.from_user.id) not in [query.message.reply_to_message.from_user.id, 0]:
+        return await query.answer(
+            f"⚠️ 𝗛𝗲𝘆, {query.from_user.first_name}.. \n\n𝗦𝗲𝗮𝗿𝗰𝗵 𝗬𝗼𝘂𝗿 𝗢𝘄𝗻𝗲𝗿 𝗙𝗶𝗹𝗲,\n\n⚠️𝗗𝗼𝗻'𝘁 𝗖𝗹𝗶𝗰𝗸 𝗢𝘁𝗵𝗲𝗿𝘀 𝗥𝗲𝘀𝘂𝗹𝘁𝘀 😬",
+            show_alert=True,
+        )
+    
+    _, key, offset, orginal_offset = query.data.split("#")
+    orginal_offset = int(orginal_offset)
+    """btn = [
+        [
+            InlineKeyboardButton(
+                text=lang.title(),
+                callback_data=f"fl#{lang.lower()}#{key}#{offset}#{orginal_offset}"
+                ),
+        ]
+        for lang in LANGUAGES
+    ]
+
+    btn.insert(
+        0,
+        [
+            InlineKeyboardButton(
+                text="sᴇʟᴇᴄᴛ ʏᴏᴜʀ ʟᴀɴɢᴜᴀɢᴇꜱ", callback_data="ident"
+            )
+        ],
+    )
+    req = query.from_user.id
+    offset = 0
+    btn.append([InlineKeyboardButton(text="Back to files", callback_data=f"next_{req}_{key}_{orginal_offset}")])
+
+    await query.edit_message_reply_markup(InlineKeyboardMarkup(btn))"""
+
+	
+    btn = [[
+        InlineKeyboardButton("ʜɪɴᴅɪ", callback_data=f"fl#hindi#{key}#{offset}#{orginal_offset}"),
+        InlineKeyboardButton("ᴇɴɢʟɪꜱʜ", callback_data=f"fl#english#{key}#{offset}#{orginal_offset}")
+        ],[
+        InlineKeyboardButton("ᴛᴀᴍɪʟ", callback_data=f"fl#tamil#{key}#{offset}#{orginal_offset}"),
+        InlineKeyboardButton("ᴛᴇʟᴜɢᴜ", callback_data=f"fl#telugu#{key}#{offset}#{orginal_offset}")
+        ],[
+        InlineKeyboardButton("ᴍᴀʟᴀʏᴀʟᴀᴍ", callback_data=f"fl#malayalam#{key}#{offset}#{orginal_offset}"),
+        InlineKeyboardButton("ᴋᴀɴɴᴀᴅᴀ", callback_data=f"fl#kannada#{key}#{offset}#{orginal_offset}")
+        ],[
+        InlineKeyboardButton("ᴘᴜɴɪᴀʙɪ", callback_data=f"fl#punjabi#{key}#{offset}#{orginal_offset}"),
+        InlineKeyboardButton("ᴍᴀʀᴀᴛʜɪ", callback_data=f"fl#marathi#{key}#{offset}#{orginal_offset}")
+        ],[
+        InlineKeyboardButton("ʙᴇɴɢᴏʟɪ", callback_data=f"fl#bengoli#{key}#{offset}#{orginal_offset}"),
+        InlineKeyboardButton("ɢᴜɪʀᴀᴛɪ", callback_data=f"fl#gujrati#{key}#{offset}#{orginal_offset}")
+        ],[
+        InlineKeyboardButton("ᴅᴜᴀʟ", callback_data=f"fl#dual#{key}#{offset}#{orginal_offset}"),
+        InlineKeyboardButton("ᴍᴜʟᴛɪ", callback_data=f"fl#multi#{key}#{offset}#{orginal_offset}")
+    ]]
+    
+
+    btn.insert(
+        0,
+        [
+            InlineKeyboardButton(
+                text="👇 sᴇʟᴇᴄᴛ ʏᴏᴜʀ ʟᴀɴɢᴜᴀɢᴇꜱ 👇", callback_data="ident"
+            )
+        ],
+    )
+    req = query.from_user.id
+    offset = 0
+    btn.append([InlineKeyboardButton(text="🏃‍♀ ʙᴀᴄᴋ ᴛᴏ ғɪʟᴇꜱ", callback_data=f"next_{req}_{key}_{orginal_offset}")])
+
+    await query.edit_message_reply_markup(InlineKeyboardMarkup(btn))
+	
+
+@Client.on_callback_query(filters.regex(r"^fl#"))
+async def filter_languages_cb_handler(client: Client, query: CallbackQuery):
+    _, lang, key, offset, orginal_offset = query.data.split("#")
+    offset = int(offset)
+    search = BUTTONS.get(key)
+
+    if not search:
+        await query.answer("You are clicking on an old button which is expired.", show_alert=True)
+        return
+
+    print(search)
+    search = search.replace("_", " ")
+    req = query.from_user.id
+
+    if int(req) not in [query.message.reply_to_message.from_user.id, 0]:
+        return await query.answer(
+            f"⚠️ 𝗛𝗲𝘆, {query.from_user.first_name}.. \n\n𝗦𝗲𝗮𝗿𝗰𝗵 𝗬𝗼𝘂𝗿 𝗢𝘄𝗻𝗲𝗿 𝗙𝗶𝗹𝗲,\n\n⚠️𝗗𝗼𝗻'𝘁 𝗖𝗹𝗶𝗰𝗸 𝗢𝘁𝗵𝗲𝗿𝘀 𝗥𝗲𝘀𝘂𝗹𝘁𝘀 😬",
+            show_alert=True,
+        )
+
+    files, n_offset, total = await get_search_results(f"{search} {lang}", max_results=10, offset=offset)
+    try:
+        n_offset = int(n_offset)
+    except:
+        n_offset = 0
+
+    files = [file for file in files if re.search(lang, file.file_name, re.IGNORECASE)]
+    if not files:
+        await query.answer(f"No files were found {search} in {lang}", show_alert=1)
+        return
+    nxreq = query.from_user.id if query.from_user else 0
+    settings = await get_settings(query.message.chat.id)
+    if settings["button"]:
+        btn = [
+            [
+                InlineKeyboardButton(
+                    text=f"💖{get_size(file.file_size)}💖{replace_username(file.file_name)}", callback_data=f'files#{file.file_id}'
+                ),
+            ]
+            for file in files
+        ]
+    else:
+        btn = [
+            [
+                InlineKeyboardButton(
+                    text=f"{file.file_name}", callback_data=f'files#{file.file_id}'
+                ),
+                InlineKeyboardButton(
+                    text=f"{get_size(file.file_size)}",
+                    callback_data=f'files#{file.file_id}',
+                ),
+            ]
+            for file in files
+        ]  
+    batch_ids = files
+    message = query.message
+    temp.BATCH_FILES[f"{message.chat.id}-{message.id}"] = batch_ids
+    batch_link = f"batchfiles#{message.chat.id}#{message.id}#{query.from_user.id}"   
+    #offset = 0
+    btn.insert(
+        0,
+        [
+          InlineKeyboardButton("Languages", callback_data=f"languages#{key}#{offset}#{offset}") 
+        ],
+    )
+
+    if n_offset == 0:
+        btn.append(
+            [
+                InlineKeyboardButton(text="ᴘᴀɢᴇꜱ", callback_data="pages"),
+                InlineKeyboardButton(
+                    "~ ʙᴀᴄᴋ", callback_data=f"fl#{lang}#{key}#{offset-10}#{orginal_offset}"
+                ),
+                InlineKeyboardButton(
+                    f"ᴘᴀɢᴇꜱ {math.ceil(offset / 10) + 1} / {math.ceil(total / 10)}",
+                    callback_data="pages",
+                ),
+            ]
+        )
+    elif offset is None:
+        btn.append(
+            [
+                InlineKeyboardButton(text="ᴘᴀɢᴇꜱ ", callback_data="pages"),
+                InlineKeyboardButton(
+                    f" {math.ceil(offset / 10) + 1} / {math.ceil(total / 10)}",
+                    callback_data="pages",
+                ),
+                InlineKeyboardButton(
+                    "ɴᴇxᴛ ~", callback_data=f"fl#{lang}#{key}#{n_offset}#{orginal_offset}"
+                ),
+            ]
+        )
+    else:
+        btn.append(
+            [
+                InlineKeyboardButton(
+                    "~ ʙᴀᴄᴋ", callback_data=f"fl#{lang}#{key}#{offset-10}#{orginal_offset}"
+                ),
+                InlineKeyboardButton(
+                    f" {math.ceil(offset / 10) + 1} / {math.ceil(total / 10)}",
+                    callback_data="pages",
+                ),
+                InlineKeyboardButton(
+                    "ɴᴇxᴛ ~", callback_data=f"fl#{lang}#{key}#{n_offset}#{orginal_offset}"
+                ),
+            ]
+        )
+
+    btn.append([
+            InlineKeyboardButton(
+                text="~ ʙᴀᴄᴋ ᴛᴏ ᴍᴀɪɴ ᴘᴀɢᴇ",
+                callback_data=f"next_{req}_{key}_{orginal_offset}"
+                ),
+        ])
+    
+    
+    await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(btn))
 
 
 @Client.on_callback_query()
@@ -671,8 +867,13 @@ async def auto_filter(client, msg, spoll=False):
         )
     else:
         btn.append(
-            [InlineKeyboardButton(text="📃 1/1", callback_data="pages")]
-        )
+            [
+                InlineKeyboardButton(text="📃 1/1", callback_data="pages")
+            ])
+        btn.insert(
+            [
+                InlineKeyboardButton("ʟᴀɴɢᴜᴀɢᴇs", callback_data=f"languages#{key}#0#{offset}")
+           ])
     imdb = await get_poster(search, file=(files[0]).file_name) if settings["imdb"] else None
     TEMPLATE = settings['template']
     if imdb:
