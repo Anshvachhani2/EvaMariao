@@ -67,8 +67,13 @@ async def next_page(bot, query):
                     text=f"[{get_size(file.file_size)}]-💠-{file.file_name}", callback_data=f'files#{file.file_id}'
                 ),
             ]
-            for file in files
-        ]
+            for file in files		
+	]
+	btn.insert(
+           [
+              InlineKeyboardButton("ʟᴀɴɢᴜᴀɢᴇs", callback_data=f"languages#{key}#0#{offset}")
+	   ])
+	   
     else:
         btn = [
             [
