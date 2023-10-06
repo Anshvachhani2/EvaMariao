@@ -3,6 +3,8 @@ from pyrogram import Client, filters
 import datetime
 import time
 from database.users_chats_db import db
+from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid
+from pyrogram.errors.exceptions.bad_request_400 import MessageTooLong, PeerIdInvalid
 from info import ADMINS
 from utils import broadcast_messages
 import asyncio
